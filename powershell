@@ -1,0 +1,114 @@
+# =========================
+# 1. Start Docker Compose
+# =========================
+docker-compose up -d
+
+
+# =========================
+# 2. Check running containers
+# =========================
+docker ps
+
+
+# =========================
+# 3. Enter Kafka container (PowerShell)
+# =========================
+docker exec -it kafka /bin/bash
+
+
+# =========================
+# 4. Inside Kafka container: go to bin folder
+# =========================
+cd /opt/kafka/bin
+
+
+# =========================
+# 5. Create Kafka Topic
+# =========================
+./kafka-topics.sh --create --topic test-topic --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1
+
+
+# =========================
+# 6. List Topics
+# =========================
+./kafka-topics.sh --list --bootstrap-server localhost:9092
+
+
+# =========================
+# 7. Describe Topic
+# =========================
+./kafka-topics.sh --describe --topic test-topic --bootstrap-server localhost:9092
+
+
+# =========================
+# 8. Start Kafka Producer (CLI)
+# =========================
+./kafka-console-producer.sh --topic test-topic --bootstrap-server localhost:9092
+
+
+# Type messages like:
+# {"name":"Ali","program":"BSCS"}
+
+
+# =========================
+# 9. Start Kafka Consumer (CLI)
+# =========================
+./kafka-console-consumer.sh --topic test-topic --bootstrap-server localhost:9092 --from-beginning
+
+
+# =========================
+# 10. Create Topic with Multiple Partitions
+# =========================
+./kafka-topics.sh --create --topic test-topic-two --bootstrap-server localhost:9092 --replication-factor 1 --partitions 3
+
+
+# =========================
+# 11. Exit Kafka container
+# =========================
+exit
+
+
+# =========================
+# 12. Run Django Migrations (PowerShell)
+# =========================
+docker exec -it django_drf python manage.py makemigrations
+
+docker exec -it django_drf python manage.py migrate
+
+
+# =========================
+# 13. Create Superuser
+# =========================
+docker exec -it django_drf python manage.py createsuperuser
+
+
+# =========================
+# 14. Test DRF API (PowerShell curl)
+# =========================
+curl -X POST http://localhost:8000/api/students/ `
+-H "Content-Type: application/json" `
+-d "{\"std_name\":\"Ali Raza\",\"program\":1}"
+
+
+# =========================
+# 15. Run Python Producer (local)
+# =========================
+python producer.py
+
+
+# =========================
+# 16. Run Python Consumer (local)
+# =========================
+python consumer.py
+
+
+# =========================
+# 17. Stop everything
+# =========================
+docker-compose down
+
+
+# =========================
+# 18. Remove volumes (full reset)
+# =========================
+docker-compose down -v
