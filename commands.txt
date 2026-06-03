@@ -1,0 +1,169 @@
+# 1. Build Docker Containers
+
+docker-compose build
+
+# 2. Start All Services
+
+docker-compose up
+
+# OR Run in Background
+
+docker-compose up -d
+
+# 3. Check Running Containers
+
+docker ps
+
+# 4. View Logs
+
+docker-compose logs
+
+docker-compose logs kafka
+
+docker-compose logs web
+
+# 5. Enter Django Container
+
+docker exec -it django_drf bash
+
+# 6. Create Migrations
+
+python manage.py makemigrations
+
+# 7. Apply Migrations
+
+python manage.py migrate
+
+# 8. Create Superuser
+
+python manage.py createsuperuser
+
+# 9. Start Django Server Manually
+
+python manage.py runserver 0.0.0.0:8000
+
+# 10. Verify Kafka Container
+
+docker exec -it kafka bash
+
+# 11. Create Kafka Topic
+
+kafka-topics 
+--create 
+--topic student-topic 
+--bootstrap-server localhost:9092 
+--partitions 1 
+--replication-factor 1
+
+# 12. List Topics
+
+kafka-topics 
+--list 
+--bootstrap-server localhost:9092
+
+# 13. Describe Topic
+
+kafka-topics 
+--describe 
+--topic student-topic 
+--bootstrap-server localhost:9092
+
+# 14. Start Kafka Console Consumer
+
+kafka-console-consumer 
+--topic student-topic 
+--bootstrap-server localhost:9092 
+--from-beginning
+
+# 15. Start Kafka Console Producer
+
+kafka-console-producer 
+--topic student-topic 
+--bootstrap-server localhost:9092
+
+# Example Message
+
+{"student_id":1,"student_name":"Ali","program":"BSCS"}
+
+# 16. Run Python Consumer
+
+python consumer.py
+
+# 17. Run Python Producer
+
+python producer.py
+
+# 18. Check Django APIs
+
+GET
+http://localhost:8000/api/students/
+
+POST
+http://localhost:8000/api/students/
+
+PUT
+http://localhost:8000/api/students/1/
+
+PATCH
+http://localhost:8000/api/students/1/
+
+DELETE
+http://localhost:8000/api/students/1/
+
+# 19. Postman POST Body
+
+{
+"std_name": "Adnan Majeed",
+"program": 1
+}
+
+# 20. Postman PUT Body
+
+{
+"std_name": "Muhammad Ali",
+"program": 1
+}
+
+# 21. Test Producer
+
+python producer.py
+
+Expected Output:
+
+Student Adnan Majeed sent to Kafka
+
+# 22. Test Consumer
+
+python consumer.py
+
+Expected Output:
+
+Waiting for messages...
+
+Student Received:
+{
+"student_id": 1,
+"student_name": "Adnan Majeed",
+"program": {
+"id": 1,
+"name": "BSCS",
+"plo": "Software Development Skills",
+"peo": "Professional Education Objectives"
+}
+}
+
+# 23. Stop Containers
+
+docker-compose down
+
+# 24. Stop and Remove Volumes
+
+docker-compose down -v
+
+# 25. Rebuild Everything
+
+docker-compose down -v
+
+docker-compose build --no-cache
+
+docker-compose up
